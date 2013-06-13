@@ -4,24 +4,33 @@ namespace Samson\Bundle\DataViewBundle\Entity;
 
 class SampleEntity
 {
-    public function getPropertyA(){
+    public function getPropertyA()
+    {
         return 'a';
     }
-    public function getPropertyB(){
+
+    public function getPropertyB()
+    {
         return 'b';
     }
-    public function getPropertyC(){
+
+    public function getPropertyC()
+    {
         return 'c';
     }
 
-    public function setPropertyD( $d ) {
+    public function setPropertyD($d)
+    {
         $this->d = $d;
     }
-    public function getPropertyD() {
+
+    public function getPropertyD()
+    {
         return $this->d;
     }
 
-    public function getNestedEntity() {
+    public function getNestedEntity()
+    {
         return new SampleEntity;
     }
 
