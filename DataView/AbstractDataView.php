@@ -52,13 +52,13 @@ abstract class AbstractDataView
     protected function addSet($property, $data, $name, $options = array())
     {
         $this->serializableData[$name] = array();
-        $sort = $this->get( $options, 'sort');
-        if( $sort ) {
-            usort( $data, $sort );
+        $sort = $this->get($options, 'sort');
+        if ($sort) {
+            usort($data, $sort);
         }
-        $limit = $this->get( $options, 'limit');
-        if( $limit ) {
-            $data = array_slice( $data, 0, $limit, true );
+        $limit = $this->get($options, 'limit');
+        if ($limit) {
+            $data = array_slice($data, 0, $limit, true);
         }
         foreach ($data as $entry) {
             $this->serializableData[$name][] = $this->add($property, $entry, $name, $options, true);
@@ -68,19 +68,19 @@ abstract class AbstractDataView
     private function findData($data, $property)
     {
         $value = PropertyAccess::createPropertyAccessor()->getValue($data, $property);
-return $value;
-}
-
-public function getData()
-{
-    return $this->serializableData;
-}
-
-protected function get($options, $option, $default = null)
-{
-    if (isset($options[$option])) {
-        return $options[$option];
+        return $value;
     }
-    return $default;
-}
+
+    public function getData()
+    {
+        return $this->serializableData;
+    }
+
+    protected function get($options, $option, $default = null)
+    {
+        if (isset($options[$option])) {
+            return $options[$option];
+        }
+        return $default;
+    }
 }
