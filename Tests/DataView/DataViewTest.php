@@ -143,7 +143,6 @@ class DataViewTest extends \PHPUnit_Framework_TestCase
             4,
             3,
         )), $data);
-
     }
 
     public function testMergingView()
