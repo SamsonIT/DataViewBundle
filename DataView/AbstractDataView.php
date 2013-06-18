@@ -2,6 +2,7 @@
 
 namespace Samson\Bundle\DataViewBundle\DataView;
 
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyPath;
@@ -101,9 +102,22 @@ abstract class AbstractDataView
         }
     }
 
+    protected function addFixed($name, $data)
+    {
+        $this->serializableData[$name] = $data;
+    }
+
     private function findData($data, $property)
     {
-        $value = PropertyAccess::createPropertyAccessor()->getValue($data, $property);
+        try {
+            $value = PropertyAccess::createPropertyAccessor()->getValue($data, $property);
+        }
+        catch( UnexpectedTypeException $e ) {
+            return null;
+        }
+        catch( NoSuchPropertyException $e ) {
+            return null;
+        }
         return $value;
     }
 

@@ -62,12 +62,9 @@ class DataViewTest extends \PHPUnit_Framework_TestCase
         $entity = new SampleEntity();
         $dataview = new SampleDataViewUnknown();
 
-        try {
-            $dataview->serialize($entity);
-            $dataview->getData();
-            $this->fail('Non existent property should throw exception!');
-        } catch (NoSuchPropertyException $e) {
-        }
+        $dataview->serialize($entity);
+        $data = $dataview->getData();
+        $this->assertEquals( array( 'propertyZ' => null ), $data );
 
     }
 
