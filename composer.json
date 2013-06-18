@@ -19,7 +19,9 @@
     "require-dev": {
     },
     "autoload": {
-        "psr-0": { "Samson\\Bundle\\DataViewBundle": "" }
+        "psr-0": {
+            "Samson\\Bundle\\DataViewBundle": ""
+        }
     },
     "target-dir": "Samson/Bundle/DataViewBundle"
 }

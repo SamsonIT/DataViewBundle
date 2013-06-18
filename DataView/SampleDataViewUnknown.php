@@ -6,7 +6,7 @@ class SampleDataViewUnknown extends AbstractDataView
 {
     public function serialize($data, array $options = array())
     {
-        $this->add('propertyE', $data );
+        $this->add('propertyE', $data);
     }
 
 }

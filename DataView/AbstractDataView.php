@@ -10,6 +10,18 @@ abstract class AbstractDataView
 {
     protected $serializableData;
 
+    public function serializeArray($data)
+    {
+        $listedData = array();
+        foreach ($data as $value) {
+            $view = clone($this);
+            $view->serialize($value);
+            $processedData = $view->getData();
+            $listedData[] = $processedData;
+        }
+        $this->serializableData = $listedData;
+    }
+
     abstract public function serialize($data, array $options = array());
 
     protected function add($property, $data, $name = null, $options = array(), $return = false)
@@ -28,7 +40,7 @@ abstract class AbstractDataView
         if ($return) {
             return $resolvedProperty;
         }
-        $this->serializableData[$name] = $resolvedProperty;
+        $this->storeData($name, $resolvedProperty, $options);
     }
 
     private function addProperty($property, $data, $options)
@@ -49,16 +61,33 @@ abstract class AbstractDataView
         return $view->getData();
     }
 
+    private function storeData($name, $data, $options)
+    {
+
+        if ($this->get($options, 'merge')) {
+            $this->mergeData($name, $data, $options);
+        } else {
+            $this->serializableData[$name] = $data;
+        }
+    }
+
+    private function mergeData($name, $data, $options)
+    {
+        foreach ($data as $name => $value) {
+            $this->serializableData[$name] = $value;
+        }
+    }
+
     protected function addSet($property, $data, $name, $options = array())
     {
         $this->serializableData[$name] = array();
-        $sort = $this->get( $options, 'sort');
-        if( $sort ) {
-            usort( $data, $sort );
+        $sort = $this->get($options, 'sort');
+        if ($sort) {
+            usort($data, $sort);
         }
-        $limit = $this->get( $options, 'limit');
-        if( $limit ) {
-            $data = array_slice( $data, 0, $limit, true );
+        $limit = $this->get($options, 'limit');
+        if ($limit) {
+            $data = array_slice($data, 0, $limit, true);
         }
         foreach ($data as $entry) {
             $this->serializableData[$name][] = $this->add($property, $entry, $name, $options, true);
@@ -68,19 +97,19 @@ abstract class AbstractDataView
     private function findData($data, $property)
     {
         $value = PropertyAccess::createPropertyAccessor()->getValue($data, $property);
-return $value;
-}
-
-public function getData()
-{
-    return $this->serializableData;
-}
-
-protected function get($options, $option, $default = null)
-{
-    if (isset($options[$option])) {
-        return $options[$option];
+        return $value;
     }
-    return $default;
-}
+
+    public function getData()
+    {
+        return $this->serializableData;
+    }
+
+    protected function get($options, $option, $default = null)
+    {
+        if (isset($options[$option])) {
+            return $options[$option];
+        }
+        return $default;
+    }
 }
