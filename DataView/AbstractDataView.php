@@ -73,8 +73,15 @@ abstract class AbstractDataView
 
     private function mergeData($name, $data, $options)
     {
-        foreach ($data as $name => $value) {
-            $this->serializableData[$name] = $value;
+        foreach ($data as $subName => $value) {
+            if ($this->get($options, 'prefix')) {
+                if ($options['prefix'] === true) {
+                    $subName = $name . $subName;
+                } else {
+                    $subName = $options['prefix'] . $subName;
+                }
+            }
+            $this->serializableData[$subName] = $value;
         }
     }
 

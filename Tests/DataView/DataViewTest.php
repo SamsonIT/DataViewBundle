@@ -4,6 +4,7 @@ namespace Samson\Bundle\DataViewBundle\Tests;
 
 use Samson\Bundle\DataViewBundle\DataView\SampleDataView;
 use Samson\Bundle\DataViewBundle\DataView\SampleMergeView;
+use Samson\Bundle\DataViewBundle\DataView\SampleMergePrefixedView;
 use Samson\Bundle\DataViewBundle\DataView\SampleDataViewAdvanced;
 use Samson\Bundle\DataViewBundle\DataView\SampleDataViewArray;
 use Samson\Bundle\DataViewBundle\DataView\SampleDataViewOptions;
@@ -154,6 +155,30 @@ class DataViewTest extends \PHPUnit_Framework_TestCase
         $data = $dataview->getData();
 
         $this->assertEquals(array('propertyA' => 'a', 'propertyB' => 'b', 'propertyC' => 'c', 'propertyD' => 'd', 'propertyE' => 'e', 'propertyF' => 'f'), $data);
+
+    }
+
+    public function testMergingPrefixedView()
+    {
+        $entity = new SampleNestingEntity();
+        $dataview = new SampleMergePrefixedView();
+
+        $dataview->serialize($entity, array('prefix' => '_'));
+        $data = $dataview->getData();
+
+        $this->assertEquals(array('_propertyA' => 'a', '_propertyB' => 'b', '_propertyC' => 'c', 'propertyD' => 'd', 'propertyE' => 'e', 'propertyF' => 'f'), $data);
+
+    }
+
+    public function testMergingAutoPrefixedView()
+    {
+        $entity = new SampleNestingEntity();
+        $dataview = new SampleMergePrefixedView();
+
+        $dataview->serialize($entity, array('prefix' => true));
+        $data = $dataview->getData();
+
+        $this->assertEquals(array('nestedpropertyA' => 'a', 'nestedpropertyB' => 'b', 'nestedpropertyC' => 'c', 'propertyD' => 'd', 'propertyE' => 'e', 'propertyF' => 'f'), $data);
 
     }
 
