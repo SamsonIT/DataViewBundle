@@ -3,12 +3,15 @@
 namespace Samson\Bundle\DataViewBundle\Tests;
 
 use Samson\Bundle\DataViewBundle\DataView\SampleDataView;
+use Samson\Bundle\DataViewBundle\DataView\SampleMergeView;
+use Samson\Bundle\DataViewBundle\DataView\SampleMergePrefixedView;
 use Samson\Bundle\DataViewBundle\DataView\SampleDataViewAdvanced;
 use Samson\Bundle\DataViewBundle\DataView\SampleDataViewArray;
 use Samson\Bundle\DataViewBundle\DataView\SampleDataViewOptions;
 use Samson\Bundle\DataViewBundle\DataView\SampleDataViewUnknown;
 use Samson\Bundle\DataViewBundle\Entity\SampleArrayEntity;
 use Samson\Bundle\DataViewBundle\Entity\SampleEntity;
+use Samson\Bundle\DataViewBundle\Entity\SampleNestingEntity;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 
 class DataViewTest extends \PHPUnit_Framework_TestCase
@@ -59,12 +62,9 @@ class DataViewTest extends \PHPUnit_Framework_TestCase
         $entity = new SampleEntity();
         $dataview = new SampleDataViewUnknown();
 
-        try {
-            $dataview->serialize($entity);
-            $dataview->getData();
-            $this->fail('Non existent property should throw exception!');
-        } catch (NoSuchPropertyException $e) {
-        }
+        $dataview->serialize($entity);
+        $data = $dataview->getData();
+        $this->assertEquals( array( 'propertyZ' => null ), $data );
 
     }
 
@@ -141,8 +141,60 @@ class DataViewTest extends \PHPUnit_Framework_TestCase
             4,
             3,
         )), $data);
+    }
+
+    public function testMergingView()
+    {
+        $entity = new SampleNestingEntity();
+        $dataview = new SampleMergeView();
+
+        $dataview->serialize($entity);
+        $data = $dataview->getData();
+
+        $this->assertEquals(array('propertyA' => 'a', 'propertyB' => 'b', 'propertyC' => 'c', 'propertyD' => 'd', 'propertyE' => 'e', 'propertyF' => 'f'), $data);
 
     }
 
+    public function testMergingPrefixedView()
+    {
+        $entity = new SampleNestingEntity();
+        $dataview = new SampleMergePrefixedView();
+
+        $dataview->serialize($entity, array('prefix' => '_'));
+        $data = $dataview->getData();
+
+        $this->assertEquals(array('_propertyA' => 'a', '_propertyB' => 'b', '_propertyC' => 'c', 'propertyD' => 'd', 'propertyE' => 'e', 'propertyF' => 'f'), $data);
+
+    }
+
+    public function testMergingAutoPrefixedView()
+    {
+        $entity = new SampleNestingEntity();
+        $dataview = new SampleMergePrefixedView();
+
+        $dataview->serialize($entity, array('prefix' => true));
+        $data = $dataview->getData();
+
+        $this->assertEquals(array('nestedpropertyA' => 'a', 'nestedpropertyB' => 'b', 'nestedpropertyC' => 'c', 'propertyD' => 'd', 'propertyE' => 'e', 'propertyF' => 'f'), $data);
+
+    }
+
+    public function testArrayOfDataView()
+    {
+        $entities = array();
+        for ($i = 0; $i < 10; $i++) {
+            $entities[] = new SampleEntity();
+        }
+        $dataview = new SampleDataView();
+
+        $dataview->serializeArray($entities);
+        $data = $dataview->getData();
+
+        $this->assertEquals(10, count($data));
+        for ($i = 0; $i < 10; $i++) {
+            $this->assertEquals(array('propertyA' => 'a', 'propertyB' => 'b', 'propertyC' => 'c'), $data[$i]);
+        }
+
+    }
 
 }

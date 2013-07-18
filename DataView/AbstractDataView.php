@@ -2,6 +2,7 @@
 
 namespace Samson\Bundle\DataViewBundle\DataView;
 
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyPath;
@@ -9,6 +10,18 @@ use Symfony\Component\PropertyAccess\PropertyPath;
 abstract class AbstractDataView
 {
     protected $serializableData;
+
+    public function serializeArray($data)
+    {
+        $listedData = array();
+        foreach ($data as $value) {
+            $view = clone($this);
+            $view->serialize($value);
+            $processedData = $view->getData();
+            $listedData[] = $processedData;
+        }
+        $this->serializableData = $listedData;
+    }
 
     abstract public function serialize($data, array $options = array());
 
@@ -28,7 +41,7 @@ abstract class AbstractDataView
         if ($return) {
             return $resolvedProperty;
         }
-        $this->serializableData[$name] = $resolvedProperty;
+        $this->storeData($name, $resolvedProperty, $options);
     }
 
     private function addProperty($property, $data, $options)
@@ -49,6 +62,30 @@ abstract class AbstractDataView
         return $view->getData();
     }
 
+    private function storeData($name, $data, $options)
+    {
+
+        if ($this->get($options, 'merge')) {
+            $this->mergeData($name, $data, $options);
+        } else {
+            $this->serializableData[$name] = $data;
+        }
+    }
+
+    private function mergeData($name, $data, $options)
+    {
+        foreach ($data as $subName => $value) {
+            if ($this->get($options, 'prefix')) {
+                if ($options['prefix'] === true) {
+                    $subName = $name . $subName;
+                } else {
+                    $subName = $options['prefix'] . $subName;
+                }
+            }
+            $this->serializableData[$subName] = $value;
+        }
+    }
+
     protected function addSet($property, $data, $name, $options = array())
     {
         $this->serializableData[$name] = array();
@@ -65,9 +102,22 @@ abstract class AbstractDataView
         }
     }
 
+    protected function addFixed($name, $data)
+    {
+        $this->serializableData[$name] = $data;
+    }
+
     private function findData($data, $property)
     {
-        $value = PropertyAccess::createPropertyAccessor()->getValue($data, $property);
+        try {
+            $value = PropertyAccess::createPropertyAccessor()->getValue($data, $property);
+        }
+        catch( UnexpectedTypeException $e ) {
+            return null;
+        }
+        catch( NoSuchPropertyException $e ) {
+            return null;
+        }
         return $value;
     }
 
