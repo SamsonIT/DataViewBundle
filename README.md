@@ -1,10 +1,34 @@
 README
 ======
 
+Example of use
+--------------
+
+```
+// class
+class SampleDataView extends AbstractDataView {
+
+    public function serialize( $data, $options )
+    {
+        $this->add( 'property.path', $data, 'name_of_key', $options );
+        $this->addSet( 'property.path', $data->getSomeArray(), 'name_of_array_key', $options );
+        $this->addFixed( 'fixed_value_name', count( $data->getSomeArray() );
+    }
+}
+
+// use
+$view = new SampleDataView;
+$view->serialize( $someEntity );
+$data = $view->getData();
+
+// $data is now something like:
+// array( 'name_of_key' => 'value_of_$entity->getProperty()->getPath()', 'name_of_array_key' => array( 1, 2, 3, 'etc' ), 'fixed_value_name' => 4 );
+
+```
 Introduction
 --------------
 
-To get a quick idea of what a DataView looks like, check out the various Samples in the DataView folder.
+To get a better idea of what a DataView looks like, check out the various Samples in the DataView folder.
 
 The DataView bundle is a configuration handler that works together with the serialization tool of your choice to
 serialize various entities and arrays. It´s an ideal tool when you need to communicate a lot of entity data to your
