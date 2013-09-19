@@ -11,12 +11,12 @@ abstract class AbstractDataView
 {
     protected $serializableData;
 
-    public function serializeArray($data)
+    public function serializeArray($data, array $options = array())
     {
         $listedData = array();
         foreach ($data as $value) {
             $view = clone($this);
-            $view->serialize($value);
+            $view->serialize($value, $options);
             $processedData = $view->getData();
             $listedData[] = $processedData;
         }
