@@ -10,11 +10,15 @@
         {
             "name": "Erik Roelofs",
             "email": "e.roelofs@samson-it.nl"
+        },
+        {
+            "name": "Bart van den Burg",
+            "email": "bart@samson-it.nl"
         }
     ],
     "require": {
         "php": ">=5.3.0",
-        "symfony/property-access": ">=2.3.0"
+        "symfony/form": ">=2.3.0"
     },
     "require-dev": {
     },
