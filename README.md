@@ -4,7 +4,7 @@ README
 Example of use
 --------------
 
-```
+```php
 // class
 class SampleDataView extends AbstractType
 {
@@ -32,8 +32,32 @@ $data = $view->createView()->getData();
 
 // $data is now something like:
 // array( 'name_of_key' => 'value_of_$entity->getOptionalPath()', 'children' => array(array(), array(), array(), 'etc' ), 'new_key' => 'value_of_$entity->getSomeCustomData()' );
-
 ```
+
+If your object is a doctrine entity, you can let the guessers so the work for you:
+
+```php
+class SampleDataView extends AbstractType
+{
+    public function getName()
+    {
+        return 'sample';
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('name_of_key')
+            ->add('children')
+        ;
+    }
+}
+```
+
+By default, if a one-to-many or many-to-many collection is encountered, the type "collection" will be setup with
+the option `type` set to `entity`. The entity type by default will try to convert your entity to an array with keys
+`id` and `name`, the latter being the object cast to string.
+
 Introduction
 --------------
 
