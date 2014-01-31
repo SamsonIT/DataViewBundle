@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Samson\\Bundle\\DataViewBundle": "Samson/Bundle/DataViewBundle"
+            "Samson\\Bundle\\DataViewBundle\\": ""
         }
     }
 }
