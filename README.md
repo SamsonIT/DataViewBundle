@@ -6,49 +6,41 @@ Example of use
 
 ```
 // class
-class SampleDataView extends AbstractDataView {
-
-    public function serialize( $data, $options )
+class SampleDataView extends AbstractType
+{
+    public function getName()
     {
-        $this->add( 'property.path', $data, 'name_of_key', $options );
-        $this->addSet( 'property.path', $data->getSomeArray(), 'name_of_array_key', $options );
-        $this->addFixed( 'fixed_value_name', count( $data->getSomeArray() );
+        return 'sample';
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('name_of_key', 'type_of_key', array('property_path' => 'optionalPath', /** other options */))
+            ->add('children', 'collection', array('type' => new ChildDataView())
+        ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $e) {
+            $e->getForm()->add('new_key', 'type_of_key', array('mapped' => false, 'data' => $e->getData()->getSomeCustomData());
+        }
     }
 }
 
 // use
-$view = new SampleDataView;
-$view->serialize( $someEntity );
-$data = $view->getData();
+$view = $container->get('samson.dataview.factory')->create(new SampleDataView(), $sample);
+$data = $view->createView()->getData();
 
 // $data is now something like:
-// array( 'name_of_key' => 'value_of_$entity->getProperty()->getPath()', 'name_of_array_key' => array( 1, 2, 3, 'etc' ), 'fixed_value_name' => 4 );
+// array( 'name_of_key' => 'value_of_$entity->getOptionalPath()', 'children' => array(array(), array(), array(), 'etc' ), 'new_key' => 'value_of_$entity->getSomeCustomData()' );
 
 ```
 Introduction
 --------------
 
-To get a better idea of what a DataView looks like, check out the various Samples in the DataView folder.
+The DataViewBundle is based in great upon the Form component in symfony. It makes use of the FormView part to convert
+an object scheme into a basic array, making full use of the flexibility the Form component offers.
 
-The DataView bundle is a configuration handler that works together with the serialization tool of your choice to
-serialize various entities and arrays. It´s an ideal tool when you need to communicate a lot of entity data to your
-frontend.
-
-I personally recommend JMS/Serializer, but any should work.
-
-How to use
-----------
-
-- First, create a new class and make it extend AbstractDataView
-- Implement a serialize() method to determine properties to serialize
-- Use ->add and ->addSet to pick properties and arrays of properties that you want added
-- Use $options to get some more control over which properties need to be included
-- Use getData() to get a data map, then run that through your serializer of choice
-
-Nesting
--------
-
-DataViews can be nested. Instead of a propertyName, you can add a new DataView().
-All the contents of the nested dataview will be added to a single element of the parent.
-Nesting works with both add (which will add a single subview) and addSet (which will add an array of subviews)
-$options can be passed to the subview as usual.
+A problem often encountered, for example, is having a situation where you want to serialize a "Project" entity with all
+it's "Product" children in one controller, and a "Product" entity with it's "Product" parent in the other. In order to
+prevent an endless serialization loop, either make use of the options to tell each type what to include and what not,
+or simply add the relevant fields to the View from the controller.
