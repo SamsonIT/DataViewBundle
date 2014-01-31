@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="samson.dataview.type.collection" class="Symfony\Component\Form\Extension\Core\Type\CollectionType">
+            <tag name="samson.dataview.type" alias="collection"/>
+        </service>
+        <service id="samson.dataview.type.form" class="Symfony\Component\Form\Extension\Core\Type\FormType">
+            <tag name="samson.dataview.type" alias="form"/>
+        </service>
+        <service id="samson.dataview.type.simple" class="Samson\Bundle\DataViewBundle\Type\SimpleType">
+            <tag name="samson.dataview.type" alias="simple"/>
+        </service>
+        <service id="samson.dataview.type.text" class="Samson\Bundle\DataViewBundle\Type\TextType">
+            <tag name="samson.dataview.type" alias="text"/>
+        </service>
+        <service id="samson.dataview.type.integer" class="Samson\Bundle\DataViewBundle\Type\IntegerType">
+            <tag name="samson.dataview.type" alias="integer"/>
+        </service>
+        <service id="samson.dataview.type.date" class="Samson\Bundle\DataViewBundle\Type\DateType">
+            <tag name="samson.dataview.type" alias="date"/>
+        </service>
+        <service id="samson.dataview.type.time" class="Samson\Bundle\DataViewBundle\Type\TimeType">
+            <tag name="samson.dataview.type" alias="time"/>
+        </service>
+        <service id="samson.dataview.type.datetime" class="Samson\Bundle\DataViewBundle\Type\DateTimeType">
+            <tag name="samson.dataview.type" alias="datetime"/>
+        </service>
+        <service id="samson.dataview.type.boolean" class="Samson\Bundle\DataViewBundle\Type\BooleanType">
+            <tag name="samson.dataview.type" alias="boolean"/>
+        </service>
+        <service id="samson.dataview.type.entity" class="Samson\Bundle\DataViewBundle\Type\EntityType">
+            <tag name="samson.dataview.type" alias="entity"/>
+        </service>
+        <service id="samson.dataview.type.id" class="Samson\Bundle\DataViewBundle\Type\IdType">
+            <argument type="service" id="doctrine"/>
+            <tag name="samson.dataview.type" alias="id"/>
+        </service>
+
+        <service id="samson.dataview.guesser.orm" class="Samson\Bundle\DataViewBundle\Guesser\DoctrineOrmTypeGuesser">
+            <argument type="service" id="doctrine"/>
+            <tag name="samson.dataview.type_guesser"/>
+        </service>
+        <service id="samson.dataview.guesser.value" class="Samson\Bundle\DataViewBundle\Guesser\IsserTypeGuesser">
+            <tag name="samson.dataview.type_guesser"/>
+        </service>
+    </services>
+
+</container>

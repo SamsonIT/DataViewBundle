@@ -6,17 +6,29 @@
 
     <services>
         <service id="samson.dataview.factory" class="Symfony\Component\Form\FormFactory">
-            <argument type="service" id="samson.dataview.registry" />
-            <argument type="service" id="samson.dataview.resolved_type_factory" />
+            <argument type="service" id="samson.dataview.registry"/>
+            <argument type="service" id="samson.dataview.resolved_type_factory"/>
         </service>
-        <service id="samson.dataview.resolved_type_factory" class="Samson\Bundle\DataViewBundle\DataView\ResolvedTypeFactory">
+        <service id="samson.dataview.resolved_type_factory"
+                 class="Samson\Bundle\DataViewBundle\DataView\ResolvedTypeFactory">
         </service>
         <service id="samson.dataview.registry" class="Symfony\Component\Form\FormRegistry">
             <argument type="collection">
-                <argument type="service" id="form.extension" />
+                <argument type="service" id="samson.dataview.extension"/>
             </argument>
-            <argument type="service" id="samson.dataview.resolved_type_factory" />
+            <argument type="service" id="samson.dataview.resolved_type_factory"/>
         </service>
+        <service id="samson.dataview.extension"
+                 class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
+            <argument type="service" id="service_container"/>
+            <!-- All services with tag "samson.dataview.type" are inserted here by FormPass -->
+            <argument type="collection"/>
+            <!-- All services with tag "samson.dataview.type_extension" are inserted here by FormPass -->
+            <argument type="collection"/>
+            <!-- All services with tag "samson_dataview.form.type_guesser" are inserted here by FormPass -->
+            <argument type="collection"/>
+        </service>
+
     </services>
 
 </container>

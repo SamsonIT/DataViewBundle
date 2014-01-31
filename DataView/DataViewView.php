@@ -6,6 +6,12 @@ use Symfony\Component\Form\FormView;
 
 class DataViewView extends FormView
 {
+
+    /**
+     * This is the method that will actually fetch the data off the view object
+     *
+     * @return array
+     */
     public function getData()
     {
         if ($this->vars['compound']) {
@@ -14,7 +20,6 @@ class DataViewView extends FormView
             }, $this->children);
         }
 
-        return $this->vars['data'];
+        return $this->vars['value'];
     }
-
-} 
+}

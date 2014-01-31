@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('samson_data_view');
+        $rootNode    = $treeBuilder->root('samson_data_view');
 
         return $treeBuilder;
     }
