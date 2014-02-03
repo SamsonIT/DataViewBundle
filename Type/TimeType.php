@@ -32,6 +32,6 @@ class TimeType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array('with_seconds' => false));
+        $resolver->setDefaults(array('with_seconds' => false, 'data_class' => null));
     }
 }
