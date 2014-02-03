@@ -28,7 +28,7 @@ class EntityType extends AbstractType
         $builder->add('id', 'id', array('id_fields' => (array) $idProperty, 'class' => $options['data_class']));
 
         if ($labelProperty) {
-            $builder->add($labelProperty, 'text', array('virtual' => 'true'));
+            $builder->add($labelProperty, 'text');
         } else {
             $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $e) {
                 $e->getForm()->add('name', 'text', array('mapped' => false, 'data' => (string) $e->getData()));
