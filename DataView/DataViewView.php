@@ -14,7 +14,7 @@ class DataViewView extends FormView
      */
     public function getData()
     {
-        if ($this->vars['compound']) {
+        if ($this->vars['compound'] && $this->vars['value'] !== null) {
             return array_map(function (DataViewView $view) {
                 return $view->getData();
             }, $this->children);
