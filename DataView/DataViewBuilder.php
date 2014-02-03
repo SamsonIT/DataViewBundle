@@ -22,5 +22,6 @@ class DataViewBuilder extends FormBuilder
     public function addFixed($name, $type, $callable)
     {
         $this->getFixedDataSubscriber()->add($name, $type, $callable);
+        return $this;
     }
 }
