@@ -23,6 +23,9 @@ class SampleDataView extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $e) {
             $e->getForm()->add('new_key', 'type_of_key', array('mapped' => false, 'data' => $e->getData()->getSomeCustomData());
         }
+
+        // or you can use this convenience method:
+        $builder->addFixed('new_key', 'type_of_key', function($data) { return $data->getSomeCustomData(); });
     }
 }
 
