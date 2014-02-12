@@ -20,6 +20,9 @@
         <service id="samson.dataview.type.integer" class="Samson\Bundle\DataViewBundle\Type\IntegerType">
             <tag name="samson.dataview.type" alias="integer"/>
         </service>
+        <service id="samson.dataview.type.float" class="Samson\Bundle\DataViewBundle\Type\FloatType">
+            <tag name="samson.dataview.type" alias="float"/>
+        </service>
         <service id="samson.dataview.type.date" class="Samson\Bundle\DataViewBundle\Type\DateType">
             <tag name="samson.dataview.type" alias="date"/>
         </service>
