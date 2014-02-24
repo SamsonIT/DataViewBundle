@@ -37,6 +37,8 @@ class DoctrineOrmTypeGuesser extends BaseGuesser
         $options = $guess->getOptions();
 
         switch ($guess->getType()) {
+            case 'number':
+                return new TypeGuess('float',$guess->getOptions(), $guess->getConfidence());
             case 'entity':
                 if ($options['multiple']) {
                     return new TypeGuess('collection', array('type' => 'entity', 'options' => array('data_class' => $options['class'])), $guess->getConfidence());
