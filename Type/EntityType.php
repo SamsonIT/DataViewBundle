@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class EntityType extends AbstractType
@@ -40,7 +41,10 @@ class EntityType extends AbstractType
     {
         $resolver->setDefaults(array(
             'id_property'    => 'id',
-            'label_property' => null
+            'label_property' => null,
+            'data_class' => function(Options $options) {
+                    return $options['class'];
+                }
         ));
     }
 }
