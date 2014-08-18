@@ -25,5 +25,9 @@ class SamsonDataViewExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
         $loader->load('extension.xml');
+
+        if (array_key_exists('DoctrineBundle', $container->getParameter('kernel.bundles'))) {
+            $loader->load('doctrine_services.xml');
+        }
     }
 }

@@ -38,15 +38,7 @@
         <service id="samson.dataview.type.entity" class="Samson\Bundle\DataViewBundle\Type\EntityType">
             <tag name="samson.dataview.type" alias="entity"/>
         </service>
-        <service id="samson.dataview.type.id" class="Samson\Bundle\DataViewBundle\Type\IdType">
-            <argument type="service" id="doctrine"/>
-            <tag name="samson.dataview.type" alias="id"/>
-        </service>
 
-        <service id="samson.dataview.guesser.orm" class="Samson\Bundle\DataViewBundle\Guesser\DoctrineOrmTypeGuesser">
-            <argument type="service" id="doctrine"/>
-            <tag name="samson.dataview.type_guesser"/>
-        </service>
         <service id="samson.dataview.guesser.value" class="Samson\Bundle\DataViewBundle\Guesser\IsserTypeGuesser">
             <tag name="samson.dataview.type_guesser"/>
         </service>
