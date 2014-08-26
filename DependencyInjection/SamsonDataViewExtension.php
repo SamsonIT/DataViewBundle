@@ -27,7 +27,7 @@ class SamsonDataViewExtension extends Extension
         $loader->load('extension.xml');
 
         if (array_key_exists('DoctrineBundle', $container->getParameter('kernel.bundles'))) {
-            $loader->load('doctrine_services.xml');
+            $loader->load('doctrine-extension.xml');
         }
     }
 }
